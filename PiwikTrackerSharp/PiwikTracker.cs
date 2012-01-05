@@ -769,7 +769,7 @@ namespace PiwikTrackerSharp
 
                         connection.AllowAutoRedirect = (false);
                         connection.Timeout = 600;
-                        connection.Headers["User-Agent"] = userAgent;
+                        connection.UserAgent = userAgent;
                         connection.Headers["Accept-Language"] = language;
                         if (requestCookie != null)
                         {
