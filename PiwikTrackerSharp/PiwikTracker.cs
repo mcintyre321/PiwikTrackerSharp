@@ -95,7 +95,7 @@ namespace PiwikTrackerSharp
                 this.setUserAgent(request.Headers["User-Agent"]);
                 this.setPageUrl(request.Url.ToString());
                 this.setIp(GetIPAddress(request));
-                this.setAcceptLanguage(request.UserLanguages.FirstOrDefault() ?? "en-us");
+                this.setAcceptLanguage(request.Headers["Accept-Language"]);
                 if (request.Cookies != null)
                 {
                     foreach (var cookieKey in request.Cookies.AllKeys)
@@ -145,16 +145,7 @@ namespace PiwikTrackerSharp
      * @param acceptLanguage as a locale object
      */
 
-        public void setAcceptLanguage(CultureInfo locale)
-        {
-            String localeLanguage = null;
-            if (locale != null)
-            {
-                localeLanguage = locale.EnglishName;
-            }
-            this.setAcceptLanguage(localeLanguage);
-        }
-
+      
         /**
      * Sets the url of the piwik installation the tracker will track to.
      * 
@@ -196,14 +187,7 @@ namespace PiwikTrackerSharp
             }
             else
             {
-                try
-                {
-                    this.apiurl = new Uri(apiurl, path + "/piwik.php");
-                }
-                catch (UriFormatException e)
-                {
-                    // should not be thrown ///HM WTF
-                }
+                this.apiurl = new Uri(apiurl, path + "piwik.php");
             }
         }
 
@@ -770,6 +754,7 @@ namespace PiwikTrackerSharp
                         connection.AllowAutoRedirect = (false);
                         connection.Timeout = 600;
                         connection.UserAgent = userAgent;
+                        
                         connection.Headers["Accept-Language"] = language;
                         if (requestCookie != null)
                         {
